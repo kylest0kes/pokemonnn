@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: pokemonnn-backend
+  h2:
+    console:
+      enabled: true
+  data:
+    jdbc: 
+      repositories:
+        enabled: true
