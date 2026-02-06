@@ -13,7 +13,7 @@ public class PokemonDTO {
 
     private String name;
 
-    private String type;
+    private List<String> type;
 
     private int weight;
 
@@ -23,13 +23,13 @@ public class PokemonDTO {
 
     private List<String> characteristics;
 
-    private String sprite;
+    private String spriteUrl;
     
-    private String color;
+    private List<String> color;
 
-    private String shape;
+    private List<String> shape;
 
-    private String species;
+    private List<String> species;
 
     private List<String> locations;
 
