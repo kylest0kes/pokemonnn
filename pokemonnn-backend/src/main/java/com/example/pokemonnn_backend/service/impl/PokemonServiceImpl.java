@@ -24,9 +24,7 @@ public class PokemonServiceImpl implements PokemonService {
     public Flux<PokemonApiResponseDTO> getAllPokemon() {
 
         Flux<PokemonApiResponseDTO> pokemonApiResponse = webClient.get().uri("/pokemon?limit=20").retrieve().bodyToFlux(PokemonApiResponseDTO.class); 
-        pokemonApiResponse.doOnNext(res -> 
-            
-            System.out.println("api res: " + res)).subscribe();
+        pokemonApiResponse.subscribe();
 
         return pokemonApiResponse;
     }
