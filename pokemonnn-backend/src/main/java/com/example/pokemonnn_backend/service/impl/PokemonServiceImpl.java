@@ -1,13 +1,14 @@
 package com.example.pokemonnn_backend.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
-import com.example.pokemonnn_backend.dto.PokemonApiResponseResultObjectDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
 
@@ -21,12 +22,20 @@ public class PokemonServiceImpl implements PokemonService {
     private WebClient webClient;
 
     @Override
-    public Flux<PokemonApiResponseDTO> getAllPokemon() {
+    public Flux<PokemonDTO> getAllPokemon() {
 
-        Flux<PokemonApiResponseDTO> pokemonApiResponse = webClient.get().uri("/pokemon?limit=20").retrieve().bodyToFlux(PokemonApiResponseDTO.class); 
-        pokemonApiResponse.subscribe();
-
-        return pokemonApiResponse;
+        return webClient.get()
+            .uri("/pokemon?limit=20")
+            .retrieve()
+            .bodyToMono(PokemonApiResponseDTO.class)
+            .flatMapMany(res -> Flux.fromIterable(res.getResults()))
+            .flatMap(summary -> 
+                webClient.get()
+                    .uri(summary.getUrl())
+                    .retrieve()
+                    .bodyToMono(Map.class)
+            )
+            .map(this::extractPokemonDto);
     }
 
     @Override
@@ -43,5 +52,48 @@ public class PokemonServiceImpl implements PokemonService {
     public Mono<PokemonDTO> getPokemonById(Integer id) {
         throw new UnsupportedOperationException("Unimplemented method 'getPokemonById'");
     }
-    
+
+    // extraction helper method
+    private PokemonDTO extractPokemonDto(Map<String, Object> json) {
+        PokemonDTO dto = new PokemonDTO();
+        dto.setId(((Number) json.get("id")).intValue());
+        dto.setName((String) json.get("name"));
+        dto.setType(extractTypes(json));
+        dto.setWeight(((Number) json.get("weight")).intValue());
+        dto.setHeight(((Number) json.get("height")).intValue());
+        dto.setAbilities(extractAbilities(json));
+        dto.setSpriteUrl(getNestedStrings(json, "sprites", "front_default"));
+        // need to make new api to call species url
+        dto.setSpecies(getNestedStrings(json, "species", "url"));
+        // need to make new api to call locations url
+        dto.setLocations("willupdate");
+        // need to make new api to call species url because gender for pokemon lives here
+        dto.setGender(getNestedStrings(json, "species", "url"));
+
+        return dto;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> extractAbilities(Map<String, Object> json) {
+        List<Map<String, Object>> abilities = (List<Map<String, Object>>) json.get("abilities");
+        return abilities.stream().map(ability -> (String) ((Map<?, ?>) ability.get("ability")).get("name")).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> extractTypes(Map<String, Object> json) {
+        List<Map<String, Object>> types = (List<Map<String, Object>>) json.get("types");
+        return types.stream().map(type -> (String) ((Map<?, ?>) type.get("type")).get("name")).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    private String getNestedStrings(Map<String, Object> json, String... path) {    
+        Object current = json;
+
+        for (String key : path) {
+            if (current == null) return null;
+            current = ((Map<String, Object>) current).get(key);
+        }
+
+        return current != null ? current.toString() : null;
+    }
 }

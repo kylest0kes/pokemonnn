@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pokemonnn_backend.service.PokemonService;
-import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
 
 import reactor.core.publisher.Flux;
@@ -24,7 +23,7 @@ public class PokemonController {
     
     // mapping for the '/api/pokemon' route which returns a stream of PokemonDTOs using the service method
     @GetMapping("")
-    public Flux<PokemonApiResponseDTO> getAllPokemon() {
+    public Flux<PokemonDTO> getAllPokemon() {
         return pokemonService.getAllPokemon();
     }
     

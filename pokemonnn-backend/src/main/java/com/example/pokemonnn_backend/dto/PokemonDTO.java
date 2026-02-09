@@ -21,17 +21,13 @@ public class PokemonDTO {
 
     private List<String> abilities;
 
-    private List<String> characteristics;
-
     private String spriteUrl;
     
-    private List<String> color;
+    // will need to change back to list later, when calling api
+    private String species;
 
-    private List<String> shape;
-
-    private List<String> species;
-
-    private List<String> locations;
+    // will need to change back to list later, when calling api
+    private String locations;
 
     private String gender;
     
