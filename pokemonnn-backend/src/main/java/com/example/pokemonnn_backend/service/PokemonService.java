@@ -15,8 +15,6 @@ public interface PokemonService {
 
     public Flux<PokemonDTO> getPokemonByType(String type);
 
-    public Mono<PokemonDTO> getPokemonById(Integer id);
-
     public Mono<List<String>> getPokemonSpecies(String name);
 
     public Mono<List<String>> getPokemonLocations(String name);

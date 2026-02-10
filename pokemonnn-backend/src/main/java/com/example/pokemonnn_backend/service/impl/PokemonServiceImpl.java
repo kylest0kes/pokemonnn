@@ -60,11 +60,6 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public Mono<PokemonDTO> getPokemonById(Integer id) {
-        throw new UnsupportedOperationException("Unimplemented method 'getPokemonById'");
-    }
-
-    @Override
     public Mono<List<String>> getPokemonLocations(String name) {
         return webClient.get()
                 .uri("/pokemon/{name}/encounters", name)
@@ -96,9 +91,6 @@ public class PokemonServiceImpl implements PokemonService {
         dto.setSpecies(species);
         // need to make new api to call locations url
         dto.setLocations(locations);
-        // need to make new api to call species url because gender for pokemon lives
-        // here
-        dto.setGender(getNestedStrings(json, "species", "url"));
 
         return dto;
     }

@@ -39,9 +39,4 @@ public class PokemonController {
         return pokemonService.getPokemonByType(type);
     }
 
-    // mapping for the '/api/pokemon/{id}' route which returns a PokemonDTO using the service method
-    @GetMapping("/{id}")
-    public Flux<PokemonDTO> getPokemonById(@PathVariable String type) {
-        return pokemonService.getPokemonByType(type);
-    }
 }

@@ -29,6 +29,4 @@ public class PokemonDTO {
     // will need to change back to list later, when calling api
     private List<String> locations;
 
-    private String gender;
-    
 }
