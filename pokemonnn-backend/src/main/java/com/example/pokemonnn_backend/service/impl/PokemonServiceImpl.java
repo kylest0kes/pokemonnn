@@ -2,6 +2,7 @@ package com.example.pokemonnn_backend.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,17 @@ public class PokemonServiceImpl implements PokemonService {
                 .bodyToMono(PokemonApiResponseDTO.class)
                 .flatMapMany(res -> Flux.fromIterable(res.getResults()))
                 .flatMap(summary -> webClient.get()
-                        .uri(summary.getUrl())
-                        .retrieve()
-                        .bodyToMono(Map.class))
-                        .flatMap(pokemonJson -> getPokemonSpecies((String) pokemonJson.get("name"))
-                        .map(species -> extractPokemonDto(pokemonJson, species))
-                );
+                    .uri(summary.getUrl())
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .flatMap(pokemonJson -> 
+                        Mono.zip(                           
+                            getPokemonSpecies((String) pokemonJson.get("name")),
+                            getPokemonLocations((String) pokemonJson.get("name"))
+                        )
+                        .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
+                    )
+                ); 
     }
 
     @Override
@@ -55,8 +61,12 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public List<String> getPokemonLocations(String name) {
-        throw new UnsupportedOperationException("Unimplemented method 'getPokemonById'");
+    public Mono<List<String>> getPokemonLocations(String name) {
+        return webClient.get()
+                .uri("/pokemon/{name}/encounters", name)
+                .retrieve()
+                .bodyToMono(Object.class)
+                .map(this::extractLocations);
     }
 
     @Override
@@ -69,8 +79,7 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     // extraction helper method
-    @SuppressWarnings("uncnhecked")
-    private PokemonDTO extractPokemonDto(Map<String, Object> json, List<String> species) {
+    private PokemonDTO extractPokemonDto(Map<String, Object> json, List<String> species, List<String> locations) {
         PokemonDTO dto = new PokemonDTO();
         dto.setId(((Number) json.get("id")).intValue());
         dto.setName((String) json.get("name"));
@@ -82,12 +91,21 @@ public class PokemonServiceImpl implements PokemonService {
         // need to make new api to call species url
         dto.setSpecies(species);
         // need to make new api to call locations url
-        dto.setLocations("willupdate");
+        dto.setLocations(locations);
         // need to make new api to call species url because gender for pokemon lives
         // here
         dto.setGender(getNestedStrings(json, "species", "url"));
 
         return dto;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> extractLocations(Object locationsJson) {
+        List<Map<String, Object>> locations = (List<Map<String, Object>>) locationsJson;
+        return locations.stream()
+                .map(location -> getNestedStrings((Map<String, Object>) location, "location_area", "name"))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ public class PokemonDTO {
     private List<String> species;
 
     // will need to change back to list later, when calling api
-    private String locations;
+    private List<String> locations;
 
     private String gender;
     

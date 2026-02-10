@@ -19,6 +19,6 @@ public interface PokemonService {
 
     public Mono<List<String>> getPokemonSpecies(String name);
 
-    public List<String> getPokemonLocations(String name);
+    public Mono<List<String>> getPokemonLocations(String name);
 
 }
