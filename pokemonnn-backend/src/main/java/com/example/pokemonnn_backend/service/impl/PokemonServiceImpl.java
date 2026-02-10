@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
+import com.example.pokemonnn_backend.service.UtilityMethodsService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,6 +22,9 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Autowired
     private WebClient webClient;
+
+    @Autowired
+    private UtilityMethodsService utilityMethodsService;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -103,7 +107,7 @@ public class PokemonServiceImpl implements PokemonService {
     private List<String> extractLocations(Object locationsJson) {
         List<Map<String, Object>> locations = (List<Map<String, Object>>) locationsJson;
         return locations.stream()
-                .map(location -> getNestedStrings((Map<String, Object>) location, "location_area", "name"))
+                .map(location -> utilityMethodsService.formatToTitleCase(getNestedStrings((Map<String, Object>) location, "location_area", "name")))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
