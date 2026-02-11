@@ -49,9 +49,20 @@ public class PokemonServiceImpl implements PokemonService {
                 ); 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Mono<PokemonDTO> getPokemonByName(String name) {
-        throw new UnsupportedOperationException("Unimplemented method 'getPokemonByName'");
+        return webClient.get()
+                .uri("/pokemon/{name}", name)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .flatMap(pokemonJson ->
+                    Mono.zip(
+                        getPokemonSpecies((String) pokemonJson.get("name")),
+                        getPokemonLocations((String) pokemonJson.get("name"))
+                    )
+                    .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
+                );
     }
 
     @Override

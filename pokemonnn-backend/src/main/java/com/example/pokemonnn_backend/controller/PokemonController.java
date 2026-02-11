@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.pokemonnn_backend.service.PokemonService;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
+import com.example.pokemonnn_backend.service.PokemonService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,13 +28,13 @@ public class PokemonController {
     }
     
     // mapping for the '/api/pokemon/{name}' route which returns a single PokemonDTO using the service method
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public Mono<PokemonDTO> getPokemonByName(@PathVariable String name) {
         return pokemonService.getPokemonByName(name);
     }
 
     // mapping for the '/api/pokemon/{type}' route which returns a stream of PokemonDTOs using the service method
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public Flux<PokemonDTO> getPokemonByType(@PathVariable String type) {
         return pokemonService.getPokemonByType(type);
     }
