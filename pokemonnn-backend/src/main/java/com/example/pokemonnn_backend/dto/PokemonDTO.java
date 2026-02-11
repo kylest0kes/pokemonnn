@@ -23,10 +23,8 @@ public class PokemonDTO {
 
     private String spriteUrl;
     
-    // will need to change back to list later, when calling api
     private List<String> species;
 
-    // will need to change back to list later, when calling api
     private List<String> locations;
 
 }

@@ -27,13 +27,13 @@ public class PokemonController {
         return pokemonService.getAllPokemon();
     }
     
-    // mapping for the '/api/pokemon/{name}' route which returns a single PokemonDTO using the service method
+    // mapping for the '/api/pokemon/name/{name}' route which returns a single PokemonDTO using the service method
     @GetMapping("/name/{name}")
     public Mono<PokemonDTO> getPokemonByName(@PathVariable String name) {
         return pokemonService.getPokemonByName(name);
     }
 
-    // mapping for the '/api/pokemon/{type}' route which returns a stream of PokemonDTOs using the service method
+    // mapping for the '/api/pokemon/type/{type}' route which returns a stream of PokemonDTOs using the service method
     @GetMapping("/type/{type}")
     public Flux<PokemonDTO> getPokemonByType(@PathVariable String type) {
         return pokemonService.getPokemonByType(type);
