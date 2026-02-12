@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,11 +20,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
-    @Autowired
-    private WebClient webClient;
+    private final WebClient webClient;
+    private final UtilityMethodsService utilityMethodsService;
 
-    @Autowired
-    private UtilityMethodsService utilityMethodsService;
+    public PokemonServiceImpl(WebClient webClient, UtilityMethodsService utilityMethodsService) {
+        this.webClient = webClient;
+        this.utilityMethodsService = utilityMethodsService;
+    }
 
     @SuppressWarnings("unchecked")
     @Override
