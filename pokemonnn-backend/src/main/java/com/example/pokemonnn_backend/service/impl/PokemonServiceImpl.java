@@ -76,6 +76,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/type/{type}", type)
                 .retrieve()
                 .bodyToMono(PokemonTypesApiResponseDTO.class)
+                .timeout(Duration.ofSeconds(13))
+                .retry(4)
                 .flatMapMany(res -> Flux.fromIterable(res.getPokemon()))
                 .flatMap(typeResult -> fetchSinglePokemon(typeResult.getPokemon().getUrl())
                     .onErrorResume(WebClientResponseException.NotFound.class, e -> {
