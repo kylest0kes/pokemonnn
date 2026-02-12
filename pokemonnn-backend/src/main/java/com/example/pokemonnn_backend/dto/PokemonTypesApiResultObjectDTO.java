@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class PokemonTypesApiResultObjectDTO {
 
-    private String name;
+    private PokemonApiResponseResultObjectDTO pokemon;
 
-    private String url;
-    
 }

@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
+import com.example.pokemonnn_backend.dto.PokemonTypesApiResponseDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
 import com.example.pokemonnn_backend.service.UtilityMethodsService;
 
@@ -65,9 +66,30 @@ public class PokemonServiceImpl implements PokemonService {
                 );
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Flux<PokemonDTO> getPokemonByType(String type) {
-        throw new UnsupportedOperationException("Unimplemented method 'getPokemonByType'");
+        return webClient.get()
+                .uri("/type/{type}", type)
+                .retrieve()
+                .bodyToMono(PokemonTypesApiResponseDTO.class)
+                .flatMapMany(res -> Flux.fromIterable(res.getPokemon()))
+                .flatMap(typeResult -> {
+                    String pokemonUrl = typeResult.getPokemon().getUrl();
+                    return webClient.get()
+                            .uri(pokemonUrl)
+                            .retrieve()
+                            .bodyToMono(Map.class)
+                            .flatMap(pokemonJson ->
+                                Mono.zip(
+                                    getPokemonSpecies((String) pokemonJson.get("name"))
+                                        .onErrorReturn(List.of()),
+                                    getPokemonLocations((String) pokemonJson.get("name"))
+                                        .onErrorReturn(List.of())
+                                )
+                                .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
+                            );
+                });
     }
 
     @Override
@@ -98,9 +120,7 @@ public class PokemonServiceImpl implements PokemonService {
         dto.setHeight(((Number) json.get("height")).intValue());
         dto.setAbilities(extractAbilities(json));
         dto.setSpriteUrl(getNestedStrings(json, "sprites", "front_default"));
-        // need to make new api to call species url
         dto.setSpecies(species);
-        // need to make new api to call locations url
         dto.setLocations(locations);
 
         return dto;
