@@ -163,7 +163,7 @@ public class PokemonServiceImpl implements PokemonService {
     @SuppressWarnings("unchecked")
     private List<String> extractAbilities(Map<String, Object> json) {
         List<Map<String, Object>> abilities = (List<Map<String, Object>>) json.get("abilities");
-        return abilities.stream().map(ability -> (String) ((Map<?, ?>) ability.get("ability")).get("name"))
+        return abilities.stream().map(ability -> utilityMethodsService.formatToTitleCase((String) ((Map<?, ?>) ability.get("ability")).get("name")))
                 .collect(Collectors.toList());
     }
 
