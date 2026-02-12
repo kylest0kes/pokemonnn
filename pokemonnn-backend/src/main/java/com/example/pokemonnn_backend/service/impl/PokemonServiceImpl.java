@@ -1,5 +1,6 @@
 package com.example.pokemonnn_backend.service.impl;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
@@ -14,21 +16,23 @@ import com.example.pokemonnn_backend.dto.PokemonTypesApiResponseDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
 import com.example.pokemonnn_backend.service.UtilityMethodsService;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
     private final WebClient webClient;
     private final UtilityMethodsService utilityMethodsService;
 
+    // constructor injection of dependencies
     public PokemonServiceImpl(WebClient webClient, UtilityMethodsService utilityMethodsService) {
         this.webClient = webClient;
         this.utilityMethodsService = utilityMethodsService;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Flux<PokemonDTO> getAllPokemon() {
 
@@ -36,38 +40,36 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/pokemon?limit=20")
                 .retrieve()
                 .bodyToMono(PokemonApiResponseDTO.class)
+                .timeout(Duration.ofSeconds(13))
+                .retry(4)
                 .flatMapMany(res -> Flux.fromIterable(res.getResults()))
-                .flatMap(summary -> webClient.get()
-                    .uri(summary.getUrl())
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .flatMap(pokemonJson -> 
-                        Mono.zip(                           
-                            getPokemonSpecies((String) pokemonJson.get("name")),
-                            getPokemonLocations((String) pokemonJson.get("name"))
-                        )
-                        .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
-                    )
+                .flatMap(summary -> fetchSinglePokemon(summary.getUrl())
+                    .onErrorResume(WebClientResponseException.NotFound.class, e -> {
+                        log.warn("Pokemon not found: {}", summary.getName(), e);
+                        return Mono.empty();
+                    })
+                    .onErrorResume(Exception.class, e -> {
+                        log.error("Failed to fetch Pokemon: {}", summary.getName(), e);
+                        return Mono.empty();
+                    })
                 ); 
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Mono<PokemonDTO> getPokemonByName(String name) {
-        return webClient.get()
-                .uri("/pokemon/{name}", name)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .flatMap(pokemonJson ->
-                    Mono.zip(
-                        getPokemonSpecies((String) pokemonJson.get("name")),
-                        getPokemonLocations((String) pokemonJson.get("name"))
-                    )
-                    .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
-                );
+        return fetchSinglePokemon("/pokemon/" + name)
+                .timeout(Duration.ofSeconds(13))
+                .retry(4)
+                .onErrorResume(WebClientResponseException.NotFound.class, e -> {
+                    log.warn("Pokemon not found: {}", name, e);
+                    return Mono.empty();
+                })
+                .onErrorResume(Exception.class, e -> {
+                    log.error("Failed to fetch Pokemon: {}", name, e);
+                    return Mono.empty();
+                });
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Flux<PokemonDTO> getPokemonByType(String type) {
         return webClient.get()
@@ -75,22 +77,16 @@ public class PokemonServiceImpl implements PokemonService {
                 .retrieve()
                 .bodyToMono(PokemonTypesApiResponseDTO.class)
                 .flatMapMany(res -> Flux.fromIterable(res.getPokemon()))
-                .flatMap(typeResult -> {
-                    String pokemonUrl = typeResult.getPokemon().getUrl();
-                    return webClient.get()
-                            .uri(pokemonUrl)
-                            .retrieve()
-                            .bodyToMono(Map.class)
-                            .flatMap(pokemonJson ->
-                                Mono.zip(
-                                    getPokemonSpecies((String) pokemonJson.get("name"))
-                                        .onErrorReturn(List.of()),
-                                    getPokemonLocations((String) pokemonJson.get("name"))
-                                        .onErrorReturn(List.of())
-                                )
-                                .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()))
-                            );
-                });
+                .flatMap(typeResult -> fetchSinglePokemon(typeResult.getPokemon().getUrl())
+                    .onErrorResume(WebClientResponseException.NotFound.class, e -> {
+                        log.warn("Pokemon not found: {}", typeResult.getPokemon().getName(), e);
+                        return Mono.empty();
+                    })
+                    .onErrorResume(Exception.class, e -> {
+                        log.error("Failed to fetch Pokemon: {}", typeResult.getPokemon().getName(), e);
+                        return Mono.empty();
+                    })
+                );
     }
 
     @Override
@@ -109,6 +105,24 @@ public class PokemonServiceImpl implements PokemonService {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .map(this::extractSpecies);
+    }
+
+    private Mono<PokemonDTO> fetchSinglePokemon(String pokemonUrl) {
+        return webClient.get()
+                .uri(pokemonUrl)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .timeout(Duration.ofSeconds(5))
+                .flatMap(this::enrichAndExtractPokemon);
+    }
+
+    private Mono<PokemonDTO> enrichAndExtractPokemon(Map<String, Object> pokemonJson) {
+        String name = (String) pokemonJson.get("name");
+        return Mono.zip(
+            getPokemonSpecies(name).onErrorReturn(List.of()),
+            getPokemonLocations(name).onErrorReturn(List.of())
+        )
+        .map(tuple -> extractPokemonDto(pokemonJson, tuple.getT1(), tuple.getT2()));
     }
 
     // extraction helper method
