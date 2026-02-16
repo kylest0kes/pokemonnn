@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import com.example.pokemonnn_backend.dto.PokemonDTO;
 import com.example.pokemonnn_backend.dto.PokemonTypesApiResponseDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
 import com.example.pokemonnn_backend.service.UtilityMethodsService;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -23,6 +26,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class PokemonServiceImpl implements PokemonService {
+
+    private final Cache<String, PokemonDTO> pokemonCache = Caffeine.newBuilder()
+        .maximumSize(1000)
+        .expireAfterWrite(10, MINUTES)
+        .build();
 
     private final WebClient webClient;
     private final UtilityMethodsService utilityMethodsService;
@@ -109,9 +117,15 @@ public class PokemonServiceImpl implements PokemonService {
                 .map(this::extractSpecies);
     }
 
-    private Mono<PokemonDTO> fetchSinglePokemon(String pokemonUrl) {
+    private Mono<PokemonDTO> fetchSinglePokemon(String url) {
+        return Mono.fromCallable(() -> pokemonCache.getIfPresent(url))
+            .switchIfEmpty(callPokeApi(url))
+            .doOnNext(pokemon -> pokemonCache.put(url, pokemon));
+    }
+
+    private Mono<PokemonDTO> callPokeApi(String url) { 
         return webClient.get()
-                .uri(pokemonUrl)
+                .uri(url)
                 .retrieve()
                 .bodyToMono(Map.class)
                 .timeout(Duration.ofSeconds(5))
@@ -186,4 +200,5 @@ public class PokemonServiceImpl implements PokemonService {
 
         return current != null ? current.toString() : null;
     }
+
 }
