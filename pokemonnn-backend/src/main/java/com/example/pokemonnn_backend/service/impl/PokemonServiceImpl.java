@@ -114,6 +114,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/pokemon-species/{name}", name)
                 .retrieve()
                 .bodyToMono(Map.class)
+                .timeout(Duration.ofSeconds(5))
+                .retry(3)
                 .map(this::extractSpecies);
     }
 
@@ -171,6 +173,7 @@ public class PokemonServiceImpl implements PokemonService {
         List<Map<String, Object>> eggGroups = (List<Map<String, Object>>) speciesJson.get("egg_groups");
         return eggGroups.stream()
                 .map(eggGroup -> (String) eggGroup.get("name"))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
