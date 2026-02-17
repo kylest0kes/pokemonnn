@@ -1,0 +1,82 @@
+.pokemon-navbar {
+  width: 100%;
+  background-color: #F00000;  // Pokeball red
+  padding: 12px 0px;
+  margin: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-label {
+  color: #F0F0F0;  // Pokemon white
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.search-dropdown {
+  background-color: #F0F0F0;  // Pokemon white
+  color: #222;
+  border: 2px solid #F0F0F0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 120px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #F00000;
+    box-shadow: 0 0 0 3px rgba(240, 0, 0, 0.2);
+  }
+
+  &:hover {
+    background-color: #E6E6E6;
+  }
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background-color: #F0F0F0;
+  color: #222;
+  border: 2px solid #F0F0F0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #F00000;
+    box-shadow: 0 0 0 3px rgba(240, 0, 0, 0.2);
+  }
+}
+
+.search-type-dropdown {
+  background-color: #F0F0F0;
+  color: #222;
+  border: 2px solid #F0F0F0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  min-width: 150px;
+  cursor: pointer;
+}

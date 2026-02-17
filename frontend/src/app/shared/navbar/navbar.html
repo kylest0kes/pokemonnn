@@ -1,1 +1,32 @@
-<p>navbar works!</p>
+<nav class="pokemon-navbar">
+  <div class="nav-container">
+    <label class="search-label">Search:</label>
+    <div class="dropdown-container">
+      <select class="search-dropdown" [(ngModel)]="searchBy" (change)="onSearchChange()">
+        <option value="name">Name</option>
+        <option value="type">Type</option>
+      </select>
+    </div>
+
+    @if (searchBy === 'name') {
+      <div class="search-input-container">
+        <input type="text" class="search-input" placeholder="Enter Pokemon name..." maxlength="20">
+      </div>
+    }
+
+    @if (searchBy === 'type') {
+      <div class="search-input-container">
+        <select class="search-type-dropdown">
+          <option value="">Select Type</option>
+          @for (type of pokemonTypes; track type) {
+            <option [value]="type">{{ type | titlecase }}</option>
+          }
+          @empty {
+            <option disabled>Loading types...</option>
+          }
+        </select>
+      </div>
+    }
+
+  </div>
+</nav>
