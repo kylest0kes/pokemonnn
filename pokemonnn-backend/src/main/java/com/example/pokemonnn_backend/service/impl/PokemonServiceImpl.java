@@ -129,6 +129,10 @@ public class PokemonServiceImpl implements PokemonService {
                 .bodyToMono(TypeApiResponseDTO.class)
                 .timeout(Duration.ofSeconds(13))
                 .retry(4)
+                .onErrorResume(e -> {
+                    log.error("Failed to get types after 4 retries", e);
+                    return Mono.empty();
+                })
                 .map(res -> res.getResults())
                 .map(resultsList -> resultsList.stream()
                         .map(TypeApiResponseResultsDTO::getName)
