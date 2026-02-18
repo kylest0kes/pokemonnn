@@ -1,5 +1,7 @@
 package com.example.pokemonnn_backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,11 @@ public class PokemonController {
     @GetMapping("/type/{type}")
     public Flux<PokemonDTO> getPokemonByType(@PathVariable String type) {
         return pokemonService.getPokemonByType(type);
+    }
+
+    @GetMapping("/type")
+    public Mono<List<String>> getTypes() {
+        return pokemonService.getTypes();
     }
 
 }

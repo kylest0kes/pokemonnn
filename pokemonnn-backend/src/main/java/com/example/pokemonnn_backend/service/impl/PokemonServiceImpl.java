@@ -14,6 +14,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.example.pokemonnn_backend.dto.PokemonApiResponseDTO;
 import com.example.pokemonnn_backend.dto.PokemonDTO;
 import com.example.pokemonnn_backend.dto.PokemonTypesApiResponseDTO;
+import com.example.pokemonnn_backend.dto.TypeApiResponseDTO;
+import com.example.pokemonnn_backend.dto.TypeApiResponseResultsDTO;
 import com.example.pokemonnn_backend.service.PokemonService;
 import com.example.pokemonnn_backend.service.UtilityMethodsService;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -117,6 +119,20 @@ public class PokemonServiceImpl implements PokemonService {
                 .timeout(Duration.ofSeconds(5))
                 .retry(3)
                 .map(this::extractSpecies);
+    }
+
+    @Override
+    public Mono<List<String>> getTypes() {
+        return webClient.get()
+                .uri("/type?limit=25")
+                .retrieve()
+                .bodyToMono(TypeApiResponseDTO.class)
+                .timeout(Duration.ofSeconds(13))
+                .retry(4)
+                .map(res -> res.getResults())
+                .map(resultsList -> resultsList.stream()
+                        .map(TypeApiResponseResultsDTO::getName)
+                        .collect(Collectors.toList()));
     }
 
     private Mono<PokemonDTO> fetchSinglePokemon(String url) {
