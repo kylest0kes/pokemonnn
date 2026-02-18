@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+
 .pokemon-navbar {
   width: 100%;
-  background-color: #F00000;  // Pokeball red
+  background-color: #F00000;
   padding: 12px 0px;
   margin: 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -8,16 +10,18 @@
 
 .nav-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 11px auto;
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 0 23px;
 }
 
 .search-label {
-  color: #F0F0F0;  // Pokemon white
+  color: #F0F0F0;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 30px;
+  font-family: 'Bangers', cursive;
   white-space: nowrap;
 }
 
@@ -26,7 +30,7 @@
 }
 
 .search-dropdown {
-  background-color: #F0F0F0;  // Pokemon white
+  background-color: #F0F0F0;
   color: #222;
   border: 2px solid #F0F0F0;
   border-radius: 8px;
@@ -60,7 +64,7 @@
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 16px;
-  min-width: 200px;
+  min-width: 300px;
   transition: all 0.3s ease;
 
   &:focus {
@@ -79,4 +83,68 @@
   font-size: 16px;
   min-width: 150px;
   cursor: pointer;
+}
+
+// RESPONSIVE BREAKPOINTS
+@media (max-width: 768px) {
+  .pokemon-navbar {
+    padding: 8px 0;
+  }
+
+  .nav-container {
+    gap: 8px;
+    padding: 0 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-label {
+    font-size: 24px;
+  }
+
+  .search-input {
+    min-width: 200px;
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+
+  .search-type-dropdown {
+    min-width: 120px;
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+
+  .search-dropdown {
+    min-width: 100px;
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-label {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .search-input {
+    min-width: 80%;
+    max-width: 300px;
+  }
+
+  .search-type-dropdown,
+  .search-dropdown {
+    min-width: 100%;
+    max-width: 300px;
+  }
+
+  .search-input-container {
+    width: 100%;
+  }
 }
