@@ -18,6 +18,5 @@ export class Home {
 
   ngOnInit() {
     this.pokemon$ = this.pokemonService.getAllPokemon();
-    console.log("home pokemon: ", this.pokemon$);
   }
 }

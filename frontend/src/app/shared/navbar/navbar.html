@@ -2,7 +2,7 @@
   <div class="nav-container">
     <label class="search-label">Search:</label>
     <div class="dropdown-container">
-      <select class="search-dropdown" [(ngModel)]="searchBy" (change)="onSearchChange()">
+      <select class="search-dropdown" [(ngModel)]="searchBy">
         <option value="name">Name</option>
         <option value="type">Type</option>
       </select>
@@ -18,10 +18,15 @@
       <div class="search-input-container">
         <select class="search-type-dropdown">
           <option value="">Select Type</option>
-          @for (type of pokemonTypes; track type) {
-            <option [value]="type">{{ type | titlecase }}</option>
-          }
-          @empty {
+          @if (pokemonTypes$ | async; as pokemonTypes) {
+            @if (pokemonTypes.length > 0) {
+              @for (type of pokemonTypes; track type) {
+                <option [value]="type">{{ type | titlecase }}</option>
+              }
+            } @else {
+              <option disabled>No types available</option>
+            }
+          } @else {
             <option disabled>Loading types...</option>
           }
         </select>
