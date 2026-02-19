@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PokemonService } from '../../services/PokemonService';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +14,7 @@ export class Navbar {
   searchBy: 'name' | 'type' = 'name';
   pokemonTypes: string[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private pokemonService: PokemonService) {}
 
   ngOnInit() {
     this.loadPokemonTypes;
@@ -27,7 +27,7 @@ export class Navbar {
   }
 
   loadPokemonTypes() {
-    this.http.get<any>("/api/pokemon/type")
+    this.pokemonService.getTypes()
       .subscribe({
         next: (data) => {
           for(let i = 0; i < data.length; i++) {
