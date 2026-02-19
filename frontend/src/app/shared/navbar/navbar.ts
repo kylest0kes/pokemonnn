@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -11,25 +12,32 @@ import { FormsModule } from '@angular/forms';
 })
 export class Navbar {
   searchBy: 'name' | 'type' = 'name';
-  pokemonTypes: string[] = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'stellar', 'unknown'];
+  pokemonTypes: string[] = [];
 
-  // RE_IMPLEMENT WITH BACKEND API LATER!!!!!!!!!!!
-  // ngOnInit() {
-  //   this.loadPokemonTypes();
-  // }
+  constructor(private http: HttpClient) {}
 
-  onSearchChange() {
-    // if (this.searchBy === 'type' && this.pokemonTypes.length === 0) {
-    //   this.loadPokemonTypes();
-    // }
+  ngOnInit() {
+    this.loadPokemonTypes;
   }
 
-  // loadPokemonTypes() {
-  //   fetch('https://pokeapi.co/v2/type')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       this.pokemonTypes = data.results.map((t: any) => t.name);
-  //     })
-  // }
+  onSearchChange() {
+    if (this.searchBy === 'type' && this.pokemonTypes.length === 0) {
+      this.loadPokemonTypes();
+    }
+  }
+
+  loadPokemonTypes() {
+    this.http.get<any>("/api/pokemon/type")
+      .subscribe({
+        next: (data) => {
+          for(let i = 0; i < data.length; i++) {
+            this.pokemonTypes.push(data[i]);
+          }
+        },
+        error: (err) => {
+          console.error("API Error: ", err);
+        }
+      });
+  }
 
 }

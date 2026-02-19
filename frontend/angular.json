@@ -60,12 +60,16 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "pokemonnn-frontend:build:development"
+          },
           "configurations": {
             "production": {
               "buildTarget": "pokemonnn-frontend:build:production"
             },
             "development": {
-              "buildTarget": "pokemonnn-frontend:build:development"
+              "buildTarget": "pokemonnn-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
