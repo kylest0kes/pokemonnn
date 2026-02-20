@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
-import { Observable } from 'rxjs';
 import { Pokecard } from "../../components/pokecard/pokecard";
+import { NgClass } from "../../../../node_modules/@angular/common/types/_common_module-chunk";
 
 @Component({
   standalone: true,

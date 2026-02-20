@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from '../../services/PokemonService';
 import { Observable } from 'rxjs';
+import { Button } from "../button/button";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, AsyncPipe],
+  imports: [CommonModule, FormsModule, AsyncPipe, Button],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
