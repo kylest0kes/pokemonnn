@@ -1,0 +1,40 @@
+.pokemon-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pokemon-grid-container {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, 280px);
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+// RESPONSIVE BREAKPOINTS
+@media (max-width: 768px) {
+  .pokemon-grid {
+    padding: 0 16px;
+  }
+
+  .pokemon-grid-container {
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, 240px);
+  }
+}
+
+@media (max-width: 480px) {
+  .pokemon-grid {
+    padding: 0 12px;
+  }
+
+  .pokemon-grid-container {
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, 200px);
+  }
+}

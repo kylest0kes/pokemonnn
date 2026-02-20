@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { Observable } from 'rxjs';
+import { Pokecard } from "../../components/pokecard/pokecard";
 
 @Component({
   standalone: true,
   selector: 'app-grid',
-  imports: [],
+  imports: [Pokecard],
   templateUrl: './grid.html',
   styleUrl: './grid.scss',
 })
