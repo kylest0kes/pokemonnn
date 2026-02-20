@@ -12,12 +12,8 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 export class Pokecard {
   @Input() p: PokemonDTO | null = null;
 
-  get speciesName(): string {
-    return this.p?.species?.[0] ?? 'Unknown';
-  }
-
-  get locationName(): string {
-    return this.p?.location?.[0] ?? 'Unknown';
+  get speciesName(): string[] {
+    return this.p?.species || ["Unknown"];
   }
 
   getCardTypeClass(): string {

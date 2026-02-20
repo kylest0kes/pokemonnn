@@ -2,7 +2,7 @@ export interface PokemonDTO {
   abilities: string[];
   height: number;
   id: number;
-  location: string[];
+  locations: string[];
   name: string;
   species: string[];
   spriteUrl: string;

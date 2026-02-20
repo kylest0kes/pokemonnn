@@ -37,19 +37,16 @@
   <div class="pokemon-meta">
     <div class="meta-group">
       <span class="meta-label">Species:</span>
-      @if (p?.species?.[0]) {
-        <span>{{ speciesName | titlecase }}</span>
+      @if (speciesName.length > 0) {
+        <div class="species-list">
+          @for (species of speciesName; track species) {
+            <span class="species-chip">{{ species | titlecase }}</span>
+          }
+        </div>
       } @else {
         <span>Unknown</span>
       }
     </div>
-    <div class="meta-group">
-      <span class="meta-label">Location:</span>
-      @if (p?.location?.[0]) {
-        <span>{{ locationName | titlecase }}</span>
-      } @else {
-        <span>Unknown</span>
-      }
-    </div>
+
   </div>
 </div>
