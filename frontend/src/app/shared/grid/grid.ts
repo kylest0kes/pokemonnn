@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { Pokecard } from "../../components/pokecard/pokecard";
-import { NgClass } from "../../../../node_modules/@angular/common/types/_common_module-chunk";
 
 @Component({
   standalone: true,
@@ -10,13 +9,7 @@ import { NgClass } from "../../../../node_modules/@angular/common/types/_common_
   templateUrl: './grid.html',
   styleUrl: './grid.scss',
 })
-export class Grid implements OnChanges{
+export class Grid {
   @Input() pokemon: PokemonDTO[] | null = null;
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['pokemon'] && this.pokemon) {
-      console.log("pokemon data flowing from home: ", this.pokemon);
-    }
-  }
 
 }

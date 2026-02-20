@@ -1,4 +1,55 @@
-<div class="pokemon-card">
-  <img [src]="" alt="name" />
-  <h3>name</h3>
+<div class="pokemon-card" [class]="getCardTypeClass()">
+  <div class="card-header">
+    <div class="pokemon-id">#{{ p?.id || 0 | number: '2.0-0' }}</div>
+    <img [src]="p?.spriteUrl" [alt]="p?.name" class="pokemon-sprite" />
+  </div>
+
+  <div class="pokemon-name">
+    {{ p?.name | titlecase }}
+  </div>
+
+  <div class="pokemon-types">
+    @for (type of p?.type; track type) {
+      <span class="type-badge type-{{ type }}">{{ type | titlecase }}</span>
+    }
+  </div>
+
+  <div class="pokemon-stats">
+    <div class="stat-item">
+      <span class="stat-label">Height</span>
+      <span class="stat-value">{{ (p?.height || 0) / 10 }}m</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Weight</span>
+      <span class="stat-value">{{ (p?.weight || 0) / 10 }}kg</span>
+    </div>
+  </div>
+
+  <div class="pokemon-abilities">
+    <span class="abilities-label">Abilities:</span>
+    <div class="abilities-list">
+      @for (ability of p?.abilities; track ability) {
+        <span class="ability-chip">{{ ability | titlecase }}</span>
+      }
+    </div>
+  </div>
+
+  <div class="pokemon-meta">
+    <div class="meta-group">
+      <span class="meta-label">Species:</span>
+      @if (p?.species?.[0]) {
+        <span>{{ speciesName | titlecase }}</span>
+      } @else {
+        <span>Unknown</span>
+      }
+    </div>
+    <div class="meta-group">
+      <span class="meta-label">Location:</span>
+      @if (p?.location?.[0]) {
+        <span>{{ locationName | titlecase }}</span>
+      } @else {
+        <span>Unknown</span>
+      }
+    </div>
+  </div>
 </div>

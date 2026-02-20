@@ -1,7 +1,7 @@
 .pokemon-grid {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -9,7 +9,7 @@
 .pokemon-grid-container {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fill, 280px);
+  grid-template-columns: repeat(auto-fill, 305px);
   justify-content: center;
   width: 100%;
   box-sizing: border-box;

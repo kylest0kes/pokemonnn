@@ -47,7 +47,7 @@ public class PokemonServiceImpl implements PokemonService {
     public Flux<PokemonDTO> getAllPokemon() {
 
         return webClient.get()
-                .uri("/pokemon?limit=50")
+                .uri("/pokemon?limit=52")
                 .retrieve()
                 .bodyToMono(PokemonApiResponseDTO.class)
                 .timeout(Duration.ofSeconds(13))

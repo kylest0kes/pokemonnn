@@ -1,7 +1,7 @@
 <div class="pokemon-grid">
   <div class="pokemon-grid-container">
     @for (p of pokemon; track p.id) {
-      <app-pokecard />
+      <app-pokecard [p]="p"/>
     }
   </div>
 </div>
