@@ -47,8 +47,8 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public Flux<PokemonDTO> getPokemonPaginated(Integer offset, Integer limit) {
-        String url = "/pokemon?offset=" + offset + "&limit=" + limit; 
+    public Flux<PokemonDTO> getPokemonPaginated(Integer offset) {
+        String url = "/pokemon?offset=" + offset + "&limit=52"; 
         return webClient.get()
                 .uri(url)
                 .retrieve()

@@ -27,8 +27,8 @@ public class PokemonController {
     
     // mapping for the '/api/pokemon' route which returns a stream of PokemonDTOs using the service method
     @GetMapping("")
-    public Flux<PokemonDTO> getPokemonPaginated(@RequestParam(defaultValue="0") Integer offset, @RequestParam(defaultValue="52") Integer limit) {
-        return pokemonService.getPokemonPaginated(offset, limit);
+    public Flux<PokemonDTO> getPokemonPaginated(@RequestParam(defaultValue="0") Integer offset) {
+        return pokemonService.getPokemonPaginated(offset);
     }
     
     // mapping for the '/api/pokemon/name/{name}' route which returns a single PokemonDTO using the service method

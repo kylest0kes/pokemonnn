@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 public interface PokemonService {
 
-    public Flux<PokemonDTO> getPokemonPaginated(Integer offset, Integer limit);
+    public Flux<PokemonDTO> getPokemonPaginated(Integer offset);
     
     public Mono<PokemonDTO> getPokemonByName(String name);
 

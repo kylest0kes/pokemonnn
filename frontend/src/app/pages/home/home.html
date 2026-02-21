@@ -1,6 +1,13 @@
 <div class="home-container">
-  @if (pokemon$ | async; as pokemonList) {
+  @let pokemonList = (pokemon$ | async);
+  @if (pokemonList?.length) {
     <app-grid [pokemon]="pokemonList" />
+    @if (isLoadingMore) {
+    <div class="loading-container">
+      <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
+    </div>
+    }
+    <div #sentinel style="height: 1px;"></div>
   } @else {
     <div class="loading-container">
       <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />

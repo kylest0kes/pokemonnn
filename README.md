@@ -3,7 +3,6 @@
 fun stuff
 
 # TODO
-- auto load in more cards on homepage when user scrolls to bottom
 - make filtering for searching by name
 - make filtering for searching by type
 - make a details page layout
