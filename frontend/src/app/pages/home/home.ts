@@ -3,7 +3,7 @@ import { Grid } from "../../shared/grid/grid";
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { PokemonService } from '../../services/PokemonService';
 import { AsyncPipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',

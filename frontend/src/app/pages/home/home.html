@@ -1,3 +1,9 @@
 <div class="home-container">
-  <app-grid [pokemon]="pokemon$ | async" />
+  @if (pokemon$ | async; as pokemonList) {
+    <app-grid [pokemon]="pokemonList" />
+  } @else {
+    <div class="loading-container">
+      <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
+    </div>
+  }
 </div>
