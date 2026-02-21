@@ -9,16 +9,16 @@ import { HttpClient } from "@angular/common/http";
 export class PokemonService {
   constructor(private http: HttpClient) {}
 
-  getAllPokemon(): Observable<PokemonDTO[]> {
-    return this.http.get<PokemonDTO[]>("/api/pokemon");
+  getPokemonPaginated(offset: number, limit: number): Observable<PokemonDTO[]> {
+    return this.http.get<PokemonDTO[]>(`/api/pokemon?offset=${offset}&limit=${limit}`)
   }
 
-  getPokemonByName(): Observable<PokemonDTO> {
-    return this.http.get<PokemonDTO>("/api/pokemon/name/${name}");
+  getPokemonByName(name: string): Observable<PokemonDTO> {
+    return this.http.get<PokemonDTO>(`/api/pokemon/name/${name}`);
   }
 
-  getPokemonByType(): Observable<PokemonDTO> {
-    return this.http.get<PokemonDTO>("/api/pokemon/type/${type}");
+  getPokemonByType(type: string): Observable<PokemonDTO> {
+    return this.http.get<PokemonDTO>(`/api/pokemon/type/${type}`);
   }
 
   getTypes(): Observable<string[]> {

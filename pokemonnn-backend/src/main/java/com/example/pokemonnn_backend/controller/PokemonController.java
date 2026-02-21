@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pokemonnn_backend.dto.PokemonDTO;
@@ -13,6 +14,7 @@ import com.example.pokemonnn_backend.service.PokemonService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 // rest controller is a controller that auto converts java object to json
 @RestController
@@ -25,8 +27,8 @@ public class PokemonController {
     
     // mapping for the '/api/pokemon' route which returns a stream of PokemonDTOs using the service method
     @GetMapping("")
-    public Flux<PokemonDTO> getAllPokemon() {
-        return pokemonService.getAllPokemon();
+    public Flux<PokemonDTO> getPokemonPaginated(@RequestParam(defaultValue="0") Integer offset, @RequestParam(defaultValue="52") Integer limit) {
+        return pokemonService.getPokemonPaginated(offset, limit);
     }
     
     // mapping for the '/api/pokemon/name/{name}' route which returns a single PokemonDTO using the service method

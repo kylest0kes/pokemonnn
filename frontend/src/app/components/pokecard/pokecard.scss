@@ -1,6 +1,6 @@
 .pokemon-card {
-  background: linear-gradient(135deg, #4a90e2, #7b68ee); // FALLBACK
-  color: black; // ENSURE TEXT IS WHITE
+  background: linear-gradient(135deg, #4a90e2, #7b68ee);
+  color: black;
   width: 280px;
   height: 380px;
   border-radius: 16px;
@@ -11,19 +11,10 @@
   transition: all 0.3s ease;
   font-family: 'Bangers', cursive;
 
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   right: 0;
-  //   height: 4px;
-  //   background: linear-gradient(90deg, #F00000, #FFD700, #00A8E8);
-  // }
-
   &:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
   }
 }
 

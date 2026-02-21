@@ -29,6 +29,9 @@ import reactor.core.publisher.Mono;
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
+    private final Duration timeoutDuration = Duration.ofSeconds(13);
+    private final Integer retryAmount = 4;
+
     private final Cache<String, PokemonDTO> pokemonCache = Caffeine.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(10, MINUTES)
@@ -44,14 +47,14 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public Flux<PokemonDTO> getAllPokemon() {
-
+    public Flux<PokemonDTO> getPokemonPaginated(Integer offset, Integer limit) {
+        String url = "/pokemon?offset=" + offset + "&limit=" + limit; 
         return webClient.get()
-                .uri("/pokemon?limit=52")
+                .uri(url)
                 .retrieve()
                 .bodyToMono(PokemonApiResponseDTO.class)
-                .timeout(Duration.ofSeconds(13))
-                .retry(4)
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .flatMapMany(res -> Flux.fromIterable(res.getResults()))
                 .flatMap(summary -> fetchSinglePokemon(summary.getUrl())
                     .onErrorResume(WebClientResponseException.NotFound.class, e -> {
@@ -68,8 +71,8 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public Mono<PokemonDTO> getPokemonByName(String name) {
         return fetchSinglePokemon("/pokemon/" + name)
-                .timeout(Duration.ofSeconds(13))
-                .retry(4)
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .onErrorResume(WebClientResponseException.NotFound.class, e -> {
                     log.warn("Pokemon not found: {}", name, e);
                     return Mono.empty();
@@ -86,8 +89,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/type/{type}", type)
                 .retrieve()
                 .bodyToMono(PokemonTypesApiResponseDTO.class)
-                .timeout(Duration.ofSeconds(13))
-                .retry(4)
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .flatMapMany(res -> Flux.fromIterable(res.getPokemon()))
                 .flatMap(typeResult -> fetchSinglePokemon(typeResult.getPokemon().getUrl())
                     .onErrorResume(WebClientResponseException.NotFound.class, e -> {
@@ -116,8 +119,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/pokemon-species/{name}", name)
                 .retrieve()
                 .bodyToMono(Map.class)
-                .timeout(Duration.ofSeconds(5))
-                .retry(3)
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .map(this::extractSpecies);
     }
 
@@ -127,8 +130,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri("/type?limit=25")
                 .retrieve()
                 .bodyToMono(TypeApiResponseDTO.class)
-                .timeout(Duration.ofSeconds(13))
-                .retry(4)
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .onErrorResume(e -> {
                     log.error("Failed to get types after 4 retries", e);
                     return Mono.empty();
@@ -150,7 +153,8 @@ public class PokemonServiceImpl implements PokemonService {
                 .uri(url)
                 .retrieve()
                 .bodyToMono(Map.class)
-                .timeout(Duration.ofSeconds(5))
+                .timeout(timeoutDuration)
+                .retry(retryAmount)
                 .flatMap(this::enrichAndExtractPokemon);
     }
 

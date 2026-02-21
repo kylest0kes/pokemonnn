@@ -17,6 +17,6 @@ export class Home {
   constructor(private pokemonService: PokemonService,) {}
 
   ngOnInit() {
-    this.pokemon$ = this.pokemonService.getAllPokemon();
+    this.pokemon$ = this.pokemonService.getPokemonPaginated(0, 52);
   }
 }
