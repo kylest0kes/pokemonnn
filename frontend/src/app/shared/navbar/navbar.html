@@ -10,14 +10,14 @@
 
     @if (searchBy === 'name') {
       <div class="search-input-container">
-        <input type="text" class="search-input" placeholder="Enter Pokemon name..." maxlength="20">
-        <app-button></app-button>
+        <input [(ngModel)]="searchName" (keyup.enter)="getInputValue()" type="text" class="search-input" placeholder="Enter Pokemon name..." maxlength="20">
+        <app-button (clicked)="getInputValue()"></app-button>
       </div>
     }
 
     @if (searchBy === 'type') {
       <div class="search-input-container">
-        <select class="search-type-dropdown">
+        <select class="search-type-dropdown" [(ngModel)]="searchType">
           <option value="">Select Pokemon Type</option>
           @if (pokemonTypes$ | async; as pokemonTypes) {
             @if (pokemonTypes.length > 0) {
@@ -31,10 +31,11 @@
             <option disabled>Loading types...</option>
           }
         </select>
-        <app-button></app-button>
+        <app-button (clicked)="getInputValue()"></app-button>
       </div>
     }
-
+    @if (searchName || searchType) {
+      <app-button type="reset" (clicked)="resetSearchTerms()" />
+    }
   </div>
 </nav>
-<div #navSentinel style="height: 1px;"></div>

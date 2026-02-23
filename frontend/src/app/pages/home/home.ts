@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild, effect } from '@angular/core';
 import { Grid } from "../../shared/grid/grid";
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
-import { PokemonService } from '../../services/PokemonService';
+import { PokemonService } from '../../services/pokemon.service.';
 import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Button } from "../../shared/button/button";
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +19,33 @@ export class Home {
   observerStrarted: boolean = false;
   isLoadingMore: boolean = false;
   showBackToTop: boolean = false;
+  isSearching: boolean = false;
 
   @ViewChild('homeSentinel') homeSentinelElement!: ElementRef;
   @ViewChild('navSentinel') navSentinelElement!: ElementRef;
 
-  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) {}
+  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef, private searchService: SearchService) {
+    effect(() => {
+      const params = this.searchService.searchParams();
+      if (params && params.searchTerm) {
+        this.isSearching = true;
+        this.isLoadingMore = true;
+        this.pokemon$.next([]);
+        if (params.searchBy === 'name') {
+          this.loadSinglePokemon(params.searchTerm);
+        } else {
+          this.loadPokemonByType(params.searchTerm);
+        }
+      } else {
+        this.isSearching = false;
+        this.currentOffset = 0;
+        this.pokemon$.next([]);
+        this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
+          this.pokemon$.next(pokemon);
+        })
+      }
+    });
+  }
 
   ngOnInit() {
     this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
@@ -87,7 +110,7 @@ export class Home {
   }
 
   loadMorePokemon() {
-    if (this.isLoadingMore) return;
+    if (this.isLoadingMore || this.isSearching) return;
 
     this.isLoadingMore = true;
     this.cdr.detectChanges();
@@ -102,6 +125,26 @@ export class Home {
       error: () => {
         this.isLoadingMore = false;
       }
+    });
+  }
+
+  loadSinglePokemon(name: string) {
+    this.isLoadingMore = true;
+    this.pokemon$.next([]);
+    this.pokemonService.getPokemonByName(name).subscribe(pokemon => {
+      this.pokemon$.next([pokemon]);
+      this.currentOffset = 0;
+      this.isLoadingMore = false;
+    });
+  }
+
+  loadPokemonByType(type: string) {
+    this.isLoadingMore = true;
+    this.pokemon$.next([]);
+    this.pokemonService.getPokemonByType(type).subscribe(pokemon => {
+      this.pokemon$.next(pokemon);
+      this.currentOffset = 0;
+      this.isLoadingMore = false;
     });
   }
 

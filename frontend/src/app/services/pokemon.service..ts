@@ -17,8 +17,8 @@ export class PokemonService {
     return this.http.get<PokemonDTO>(`/api/pokemon/name/${name}`);
   }
 
-  getPokemonByType(type: string): Observable<PokemonDTO> {
-    return this.http.get<PokemonDTO>(`/api/pokemon/type/${type}`);
+  getPokemonByType(type: string): Observable<PokemonDTO[]> {
+    return this.http.get<PokemonDTO[]>(`/api/pokemon/type/${type}`);
   }
 
   getTypes(): Observable<string[]> {

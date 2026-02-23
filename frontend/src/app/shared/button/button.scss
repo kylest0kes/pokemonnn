@@ -13,3 +13,15 @@
   display: block;
 }
 
+.reset-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  margin: -10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+

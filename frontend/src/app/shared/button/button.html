@@ -1,3 +1,9 @@
-<button class="pokeball-btn" (click)="onClick()">
-  <img src="../../../assets/imgs/pokeball.png" alt="pokeball" class="pokeball-img" />
-</button>
+@if (type === 'reset') {
+  <button class="reset-btn" (click)="onClick()">
+    <img src="../../../assets/imgs/reset.png" alt="reset-button" class="reset-btn" />
+  </button>
+} @else {
+    <button class="pokeball-btn" (click)="onClick()">
+      <img src="../../../assets/imgs/pokeball.png" alt="pokeball" class="pokeball-img" />
+    </button>
+  }
