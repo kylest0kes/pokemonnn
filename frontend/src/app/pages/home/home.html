@@ -1,4 +1,6 @@
 <div class="home-container">
+  <div #navSentinel style="height: 1px;"></div>
+  <app-button class="back-to-top" [class.show]="showBackToTop" (clicked)="scrollToTop()"/>
   @let pokemonList = (pokemon$ | async);
   @if (pokemonList?.length) {
     <app-grid [pokemon]="pokemonList" />
@@ -7,10 +9,10 @@
       <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
     </div>
     }
-    <div #sentinel style="height: 1px;"></div>
   } @else {
     <div class="loading-container">
       <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
     </div>
   }
+  <div #homeSentinel style="height: 1px;"></div>
 </div>

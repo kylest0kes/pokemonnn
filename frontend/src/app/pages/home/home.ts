@@ -4,10 +4,11 @@ import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { PokemonService } from '../../services/PokemonService';
 import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { Button } from "../../shared/button/button";
 
 @Component({
   selector: 'app-home',
-  imports: [Grid, AsyncPipe],
+  imports: [Grid, AsyncPipe, Button],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -16,12 +17,12 @@ export class Home {
   currentOffset: number = 0;
   observerStrarted: boolean = false;
   isLoadingMore: boolean = false;
+  showBackToTop: boolean = false;
 
-  @ViewChild('sentinel') sentinelElement!: ElementRef;
+  @ViewChild('homeSentinel') homeSentinelElement!: ElementRef;
+  @ViewChild('navSentinel') navSentinelElement!: ElementRef;
 
-  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) {
-
-  }
+  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
@@ -29,14 +30,15 @@ export class Home {
     });
   }
 
-  ngAfterViewChecked() {
-    if (this.sentinelElement && !this.observerStrarted) {
-      this.startIntersectionObserver();
+  ngAfterViewInit() {
+    if (this.homeSentinelElement && this.navSentinelElement && !this.observerStrarted) {
+      this.startLoadMoreIntersectionObserver();
+      this.startNavIntersectionObserver();
       this.observerStrarted = true;
     }
   }
 
-  startIntersectionObserver() {
+  startLoadMoreIntersectionObserver() {
     const observer = new IntersectionObserver(sentinel => {
       sentinel.forEach(s => {
         if (s.isIntersecting) {
@@ -45,9 +47,43 @@ export class Home {
       });
     });
 
-    if (this.sentinelElement) {
-      observer.observe(this.sentinelElement.nativeElement);
+    if (this.homeSentinelElement) {
+      observer.observe(this.homeSentinelElement.nativeElement);
     }
+  }
+
+  startNavIntersectionObserver() {
+    const observer = new IntersectionObserver(sentinel => {
+      sentinel.forEach(s => {
+        if (!s.isIntersecting) {
+          this.showButtonToTop();
+        } else {
+          this.hideButtonToTop();
+        }
+      })
+    });
+
+    if (this.navSentinelElement) {
+      observer.observe(this.navSentinelElement.nativeElement);
+    }
+  }
+
+  showButtonToTop() {
+    this.showBackToTop = true;
+    this.cdr.detectChanges();
+  }
+
+  hideButtonToTop() {
+    this.showBackToTop = false;
+    this.cdr.detectChanges();
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   loadMorePokemon() {

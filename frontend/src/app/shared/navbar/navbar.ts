@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from '../../services/PokemonService';
 import { Observable } from 'rxjs';
@@ -21,4 +21,5 @@ export class Navbar {
   ngOnInit() {
     this.pokemonTypes$ = this.pokemonService.getTypes();
   }
+
 }
