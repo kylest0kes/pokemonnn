@@ -3,6 +3,7 @@
 fun stuff
 
 # TODO
+- add logic/display for if a invalid pokemon name is searched for
 - make filtering for searching by name
 - make filtering for searching by type
 - make a details page layout
