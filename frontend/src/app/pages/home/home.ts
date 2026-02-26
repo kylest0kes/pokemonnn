@@ -20,6 +20,8 @@ export class Home {
   isLoadingMore: boolean = false;
   showBackToTop: boolean = false;
   isSearching: boolean = false;
+  isNameSearch: boolean = false;
+  isTypeSearch: boolean = false;
 
   @ViewChild('homeSentinel') homeSentinelElement!: ElementRef;
   @ViewChild('navSentinel') navSentinelElement!: ElementRef;
@@ -28,16 +30,23 @@ export class Home {
     effect(() => {
       const params = this.searchService.searchParams();
       if (params && params.searchTerm) {
-        this.isSearching = true;
+        this.isNameSearch = false;
+        this.isTypeSearch = false;
+
         this.isLoadingMore = true;
         this.pokemon$.next([]);
+
         if (params.searchBy === 'name') {
+          this.isNameSearch = true;
           this.loadSinglePokemon(params.searchTerm);
         } else {
+          this.isTypeSearch = true;
           this.loadPokemonByType(params.searchTerm);
         }
       } else {
-        this.isSearching = false;
+        this.isNameSearch = false;
+        this.isTypeSearch = false;
+        this.isLoadingMore = false;
         this.currentOffset = 0;
         this.pokemon$.next([]);
         this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
@@ -110,6 +119,7 @@ export class Home {
   }
 
   loadMorePokemon() {
+    if (this.isNameSearch || this.isTypeSearch) return;
     if (this.isLoadingMore || this.isSearching) return;
 
     this.isLoadingMore = true;
@@ -131,11 +141,23 @@ export class Home {
   loadSinglePokemon(name: string) {
     this.isLoadingMore = true;
     this.pokemon$.next([]);
-    this.pokemonService.getPokemonByName(name).subscribe(pokemon => {
-      this.pokemon$.next([pokemon]);
-      this.currentOffset = 0;
-      this.isLoadingMore = false;
-    });
+    this.pokemonService.getPokemonByName(name).subscribe({
+      next: (pokemon) => {
+        if (pokemon) {
+          this.pokemon$.next([pokemon]);
+          this.isNameSearch = false;
+        } else {
+          this.pokemon$.next([]);
+        }
+        this.currentOffset = 0;
+        this.isLoadingMore = false;
+      },
+      error: (err) => {
+        this.pokemon$.next([]);
+        this.isLoadingMore = false;
+      }
+    })
+
   }
 
   loadPokemonByType(type: string) {

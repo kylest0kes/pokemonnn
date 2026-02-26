@@ -1,22 +1,26 @@
 <div class="home-container">
   <div #navSentinel style="height: 1px;"></div>
   <app-button class="back-to-top" [class.show]="showBackToTop" (clicked)="scrollToTop()"/>
+
   @let pokemonList = (pokemon$ | async);
+
   @if (pokemonList?.length) {
     <app-grid [pokemon]="pokemonList" />
     @if (isLoadingMore) {
-    <div class="loading-container">
-      <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
-    </div>
-    }
-    @else {
-    <img src="../../../assets/imgs/team_rocket.png" alt="team-rocket" class="no-results-found-img" />
-    <h3 class="no-results-found-text">Oops! No Pokemon found</h3>
+      <div class="loading-container">
+        <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
+      </div>
     }
   } @else {
-    <div class="loading-container">
-      <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
-    </div>
+    @if (isLoadingMore) {
+      <div class="loading-container">
+        <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
+      </div>
+    } @else if (isNameSearch) {
+      <img src="../../../assets/imgs/team_rocket.png" alt="team-rocket" class="no-results-found-img" />
+      <h3 class="no-results-found-text">Oops! No Pokemon found</h3>
+    }
   }
+
   <div #homeSentinel style="height: 1px;"></div>
 </div>
