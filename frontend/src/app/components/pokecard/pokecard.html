@@ -1,7 +1,11 @@
 <div class="pokemon-card" [class]="getCardTypeClass()">
   <div class="pokemon-id">#{{ p?.id || 0 | number: '2.0-0' }}</div>
   <div class="card-header">
-    <img [src]="p?.spriteUrl" [alt]="p?.name" class="pokemon-sprite" />
+    @if (p?.spriteUrl != null) {
+      <img [src]="p?.spriteUrl" [alt]="p?.name" class="pokemon-sprite" />
+    } @else {
+      <img src="../../../assets/imgs/question-mark.png" [alt]="p?.name" class="pokemon-sprite" />
+    }
   </div>
 
   <div class="pokemon-name">
