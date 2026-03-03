@@ -5,7 +5,7 @@
   @let pokemonList = (pokemon$ | async);
 
   @if (pokemonList?.length) {
-    <app-grid [pokemon]="pokemonList" />
+    <app-grid [pokemon]="pokemonList" (selectedPokemon)="handlePokemonSelected($event)" />
     @if (isLoadingMore) {
       <div class="loading-container">
         <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />

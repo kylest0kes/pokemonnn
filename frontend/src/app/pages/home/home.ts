@@ -6,6 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Button } from "../../shared/button/button";
 import { SearchService } from '../../services/search.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -168,6 +169,10 @@ export class Home {
       this.currentOffset = 0;
       this.isLoadingMore = false;
     });
+  }
+
+  handlePokemonSelected(name: string) {
+    console.log("pokemon name from pokecard > grid > home: ", name);
   }
 
 }

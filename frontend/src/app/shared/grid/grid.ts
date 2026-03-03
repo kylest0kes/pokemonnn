@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { Pokecard } from "../../components/pokecard/pokecard";
 
@@ -11,5 +11,10 @@ import { Pokecard } from "../../components/pokecard/pokecard";
 })
 export class Grid {
   @Input() pokemon: PokemonDTO[] | null = null;
+  @Output() selectedPokemon = new EventEmitter<string>();
+
+  onPokemonSelected(name: string) {
+    this.selectedPokemon.emit(name);
+  }
 
 }

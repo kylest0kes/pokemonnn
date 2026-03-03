@@ -1,4 +1,4 @@
-<div class="pokemon-card" [class]="getCardTypeClass()">
+<div class="pokemon-card" [class]="getCardTypeClass()" (click)="onCardClick()">
   <div class="pokemon-id">#{{ p?.id || 0 | number: '2.0-0' }}</div>
   <div class="card-header">
     @if (p?.spriteUrl != null) {

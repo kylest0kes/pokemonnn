@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 
@@ -11,6 +11,7 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 })
 export class Pokecard {
   @Input() p: PokemonDTO | null = null;
+  @Output() selectedPokemon = new EventEmitter<string>();
 
   get speciesName(): string[] {
     return this.p?.species || ["Unknown"];
@@ -19,4 +20,9 @@ export class Pokecard {
   getCardTypeClass(): string {
       return `type-${this.p?.type[0]?.toLowerCase() || 'normal'}`;
   }
+
+  onCardClick() {
+    this.selectedPokemon.emit(this.p?.name);
+  }
+
 }
