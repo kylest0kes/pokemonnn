@@ -63,9 +63,11 @@ export class Home {
   }
 
   ngOnInit() {
-    this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
-      this.pokemon$?.next(pokemon);
-    });
+    if (!this.searchService.searchParams()) {
+      this.pokemonService.getPokemonPaginated(0).subscribe(pokemon => {
+        this.pokemon$?.next(pokemon);
+      });
+    }
   }
 
   ngAfterViewInit() {

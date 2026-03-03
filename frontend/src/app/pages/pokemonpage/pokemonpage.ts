@@ -19,11 +19,11 @@ export class Pokemonpage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private pokemonService: PokemonService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
-    // Get the 'name' parameter from the route
+
     this.route.paramMap.subscribe(params => {
       const name = params.get('name');
       console.log("param: ", name);
