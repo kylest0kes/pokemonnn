@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule, TitleCasePipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { PokemonService } from '../../services/pokemon.service.';
 import { PokemonDTO } from '../../models/pokemon-dto.interface';
+import { PokemonStatSheet } from "../../components/pokemon-stat-sheet/pokemon-stat-sheet";
 
 @Component({
   standalone: true,
   selector: 'app-pokemonpage',
-  imports: [TitleCasePipe, CommonModule, HttpClientModule],
+  imports: [CommonModule, PokemonStatSheet],
   templateUrl: './pokemonpage.html',
   styleUrl: './pokemonpage.scss',
 })
