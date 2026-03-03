@@ -6,6 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Button } from "../../shared/button/button";
 import { SearchService } from '../../services/search.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +27,13 @@ export class Home {
   @ViewChild('homeSentinel') homeSentinelElement!: ElementRef;
   @ViewChild('navSentinel') navSentinelElement!: ElementRef;
 
-  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef, private searchService: SearchService) {
-    effect(() => {
+  constructor(
+      private pokemonService: PokemonService,
+      private cdr: ChangeDetectorRef,
+      private searchService: SearchService,
+      private router: Router
+    ) {
+      effect(() => {
       const params = this.searchService.searchParams();
       if (params && params.searchTerm) {
         this.isNameSearch = false;
@@ -172,6 +178,7 @@ export class Home {
 
   handlePokemonSelected(name: string) {
     console.log("pokemon name from pokecard > grid > home: ", name);
+    this.router.navigate(['/pokemon', name]);
   }
 
 }
