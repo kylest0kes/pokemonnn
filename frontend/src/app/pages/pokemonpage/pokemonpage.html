@@ -1,1 +1,13 @@
-<p>pokemonpage works!</p>
+@if (isLoading) {
+  <div class="loading-container">
+    <img src="../../../assets/imgs/pokeball.png" alt="loading" class="pokeball-spinner" />
+  </div>
+} @else if (!isLoading && pokemon) {
+  <div class="pokemon-details">
+    <h1>{{ pokemon.name | titlecase }}</h1>
+    <!-- Display other pokemon details here -->
+  </div>
+} @else {
+  <img src="../../../assets/imgs/team_rocket.png" alt="team-rocket" class="no-results-found-img" />
+  <h3 class="no-results-found-text">Oops! No Pokemon found</h3>
+}
