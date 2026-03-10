@@ -13,6 +13,10 @@ export class Header {
   constructor(private router: Router) {}
 
   navigateToHome() {
+    const isOnHome = this.router.url === '/' || this.router.url.startsWith('/?');
+    if (isOnHome) {
+      window.location.reload();
+    }
     this.router.navigate(['/']);
   }
 }

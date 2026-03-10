@@ -179,7 +179,6 @@ export class Home {
   }
 
   handlePokemonSelected(name: string) {
-    console.log("pokemon name from pokecard > grid > home: ", name);
     this.router.navigate(['/pokemon', name]);
   }
 

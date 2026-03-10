@@ -1,1 +1,79 @@
-<p>{{ chosenPokemon?.name}} in stat sheet yo</p>
+<div class="pokemon-details" [class]="getDetailsTypeClass()">
+  <div class="details-header">
+    <div class="pokemon-id">#{{ chosenPokemon?.id || 0 | number: '2.0-0' }}</div>
+    <div class="sprite-container">
+      @if (chosenPokemon?.spriteUrl) {
+        <img [src]="chosenPokemon?.spriteUrl" [alt]="chosenPokemon?.name" class="pokemon-sprite-large" />
+      } @else {
+        <img src="../../../assets/imgs/question-mark.png" [alt]="chosenPokemon?.name" class="pokemon-sprite-large" />
+      }
+    </div>
+    <div class="pokemon-name-large">
+      {{ chosenPokemon?.name | titlecase }}
+    </div>
+  </div>
+
+  <div class="details-section">
+    <div class="section-title">Types</div>
+    <div class="pokemon-types">
+      @if (chosenPokemon?.type?.length) {
+        @for (type of chosenPokemon?.type; track type) {
+          <span class="type-badge type-{{ type }}">{{ type | titlecase }}</span>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="details-section">
+    <div class="section-title">Physical Stats</div>
+    <div class="pokemon-stats-large">
+      <div class="stat-item">
+        <span class="stat-label">Height</span>
+        <span class="stat-value">{{ (chosenPokemon?.height || 0) / 10 }} m</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Weight</span>
+        <span class="stat-value">{{ (chosenPokemon?.weight || 0) / 10 }} kg</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="details-section">
+    <div class="section-title">Abilities</div>
+    @if (chosenPokemon?.abilities?.length) {
+      <div class="abilities-grid">
+        @for (ability of chosenPokemon?.abilities; track ability) {
+          <span class="ability-chip-large">{{ ability | titlecase }}</span>
+        }
+      </div>
+    } @else {
+      <span class="no-data">No abilities data</span>
+    }
+  </div>
+
+  <div class="details-section">
+    <div class="section-title">Species</div>
+    @if (chosenPokemon?.species?.length) {
+      <div class="species-grid">
+        @for (species of chosenPokemon?.species; track species) {
+          <span class="species-chip-large">{{ species | titlecase }}</span>
+        }
+      </div>
+    } @else {
+      <span class="no-data">No species data available</span>
+    }
+  </div>
+
+  <div class="details-section">
+    <div class="section-title">Locations</div>
+    @if (chosenPokemon?.locations?.length) {
+      <div class="locations-grid">
+        @for (location of chosenPokemon?.locations; track location) {
+          <span class="location-chip">{{ location | titlecase }}</span>
+        }
+      </div>
+    } @else {
+      <span class="no-data">No location data available</span>
+    }
+  </div>
+</div>

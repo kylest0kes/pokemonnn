@@ -1,0 +1,152 @@
+.pokemon-details {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: black;
+  max-width: 600px;
+  margin: 90px auto;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  font-family: 'Bangers', cursive;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+  }
+}
+
+.details-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .pokemon-id {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .pokemon-sprite-large {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+    margin-bottom: 20px;
+  }
+
+  .pokemon-name-large {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
+  }
+}
+
+.details-section {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+  }
+}
+
+.pokemon-types {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pokemon-stats-large {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  justify-items: center;
+}
+
+.type-badge, .ability-chip-large, .species-chip-large, .location-chip {
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.abilities-grid, .species-grid, .locations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  .stat-label {
+    font-size: 16px;
+    color: black;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+  }
+}
+
+.no-data {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  text-align: center;
+  display: block;
+  padding: 20px;
+}
+
+.type-normal { background: linear-gradient(135deg, #A8A878, #D8D0B0); }
+.type-fire { background: linear-gradient(135deg, #F08030, #FFCB91); }
+.type-water { background: linear-gradient(135deg, #6890F0, #B8D0FF); }
+.type-grass { background: linear-gradient(135deg, #78C850, #C0F0C0); }
+.type-electric { background: linear-gradient(135deg, #F8D030, #FFF290); }
+.type-ice { background: linear-gradient(135deg, #98D8D8, #D0F0F0); }
+.type-fighting { background: linear-gradient(135deg, #C03028, #F0A0A0); }
+.type-poison { background: linear-gradient(135deg, #A040A0, #D8A8E0); }
+.type-ground { background: linear-gradient(135deg, #E0C068, #F0D8A8); }
+.type-flying { background: linear-gradient(135deg, #A890F0, #D0C0FF); }
+.type-psychic { background: linear-gradient(135deg, #F85888, #FFB0C0); }
+.type-bug { background: linear-gradient(135deg, #A8B820, #D0E0A0); }
+.type-rock { background: linear-gradient(135deg, #B8A038, #E0D0A8); }
+.type-ghost { background: linear-gradient(135deg, #705898, #B8A8D0); }
+.type-dragon { background: linear-gradient(135deg, #7038F8, #B898F8); }
+.type-dark { background: linear-gradient(135deg, #705848, #B0A890); }
+.type-steel { background: linear-gradient(135deg, #B8B8D0, #D8D8E8); }
+.type-fairy { background: linear-gradient(135deg, #EE99AC, #FFC0D0); }

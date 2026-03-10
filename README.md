@@ -1,6 +1,4 @@
 # Pokemonnn
 
-fun stuff
-
-# TODO
-- make a details page layout
+fun learning stuff
+bulit in Angular with Reactive Sprig backend. 
