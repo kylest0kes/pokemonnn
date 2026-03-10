@@ -1,2 +1,15 @@
+# IDE
 .vscode/
+
+# Environment
 .env
+src/environments/environment.prod.ts
+
+# Builds
+target/
+dist/
+*.jar
+node_modules/
+
+# Docker (optional)
+.dockerignore
